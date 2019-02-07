@@ -103,6 +103,7 @@
         constructor() {
           this.inicializar()
           this.generarSecuencia()
+          this.siguienteNivel()
         }
 
         inicializar() {
@@ -112,7 +113,7 @@
               //celeste : celeste // Estamos asignando la propiedad celeste al objeto this.colores, y a esa propiedad le 
                                 // asignamos la variables celeste, la que en verdad es un DIV. De manera resumida se puede colocar
                                 // unicamente "Celeste", y JS entendera que el nombre de la propiedad es igual al valor de esta
-                celeste,
+                celeste,        // celeste : celeste
                 violeta,
                 naranja,
                 verde
@@ -121,6 +122,54 @@
 
         generarSecuencia(){
             this.secuencia = new Array(10).fill(0).map(n=> Math.floor(Math.random() * 4))
+        }
+
+        siguienteNivel(){
+            this.iluminarSecuencia()
+        }
+
+        transformarNumeroAColor(numero){
+            switch (numero){
+                case 0: 
+                    return 'celeste'
+                case 1: 
+                    return 'violeta'
+                case 2: 
+                    return 'naranja'
+                case 3:
+                    return 'verde'
+            }
+        }
+
+
+        // El codigo de abajo, genera bug debido al uso de var en la variable color
+        // siempre que una variable no es cambiada dentro de un grupo de sentencias, es mejor declararla como let. Al usarlo,
+        // la variable color va a mantener su valor para cada uno de los ciclos
+        // si el valor ya no va a ser cambiado es mejor utilizar const
+        // iluminarSecuencia(){
+        //     for (var i=0; i <this.nivel; i++){
+        //         var color = this.transformarNumeroAColor(this.secuencia[i])
+        //         setTimeout(() => {
+        //         console.log(color)
+        //             this.iluminarColor(color)
+        //         }, 1000 * i)
+        //     }
+        // }
+
+        iluminarSecuencia(){
+            for (let i=0; i <this.nivel; i++){
+                const color = this.transformarNumeroAColor(this.secuencia[i]) // Siempre que se pueda utilizar const >> let >> var
+                setTimeout(() => this.iluminarColor(color), 1000 * i)
+            }
+        }
+
+
+        iluminarColor(color){
+            this.colores[color].classList.add('light')
+            setTimeout(() => this.apagarColor(color), 350);
+        }
+        apagarColor(color){
+            this.colores[color].classList.remove('light')
         }
       }
 
